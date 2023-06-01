@@ -12,7 +12,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
     <div class="border p-3 mt-3">
       <h2>新增球員</h2>
       <hr>
-      <form action="event/addPlayer.php" method="POST">
+      <form action="event/addPlayerEvent.php" method="POST">
         <div class="form-group">
           <label for="playerName">球員號碼:</label>
           <input type="text" class="form-control mt-2 mb-2" id="playerNumber" name="playerNumber" required>
@@ -61,8 +61,8 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
         echo '<div class="card-body">';
         echo '<h5 class="card-title">' . $row['PlayerNumber'] . ": " .  $row['PlayerName'] . '</h5>';
         echo '<p class="card-text">職位: ' . $row['PositionName'] . '</p>';
-        echo '<a href="event/editPlayer.php?PlayerNumber=' . $row['PlayerNumber'] . '" class="btn btn-primary me-2">Edit</a>';
-        echo '<a href="event/deletePlayer.php?PlayerNumber=' . $row['PlayerNumber'] . '&TeamID=' . $row['TeamID'] . '" class="btn btn-danger">Delete</a>';
+        echo '<a href="editPlayer.php?PlayerNumber=' . $row['PlayerNumber'] . '&TeamID=' . $row['TeamID'] . '" class="btn btn-primary me-2">Edit</a>';
+        echo '<a href="event/deletePlayerEvent.php?PlayerNumber=' . $row['PlayerNumber'] . '&TeamID=' . $row['TeamID'] . '" class="btn btn-danger">Delete</a>';
         echo '</div>';
         echo '</div>';
       }
