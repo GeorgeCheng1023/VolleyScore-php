@@ -18,14 +18,16 @@
           </a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="team.php">管理隊伍</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="player.php?TeamID=1">管理球員</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
             <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
         </li>
-       
+
       </ul>
-      
+
     </div>
   </div>
 </nav>
