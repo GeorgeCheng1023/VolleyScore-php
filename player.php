@@ -6,8 +6,6 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
 <body id="wrapper">
   <?php include "components/header.php"; ?>
 
-
-
   <div class="container">
     <div class="border p-3 mt-3">
       <h2>新增球員</h2>
@@ -24,7 +22,23 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
         </div>
         <div class="form-group">
           <label for="positionID">職位:</label>
-          <input type="number" class="form-control mt-2 mb-2" id="positionID" name="positionID" required>
+          <select class="form-control form-select" id="positionID" name="positionID" required>
+            <?php
+            // Display position options
+            include($_SERVER['DOCUMENT_ROOT'] . '/utils/db_connect.php');
+            $positionSql = "SELECT PositionID, PositionName FROM Position";
+            $positionStmt = sqlsrv_query($conn, $positionSql);
+            // Check if the query execution is successful
+            if ($positionStmt === false) {
+              die(print_r(sqlsrv_errors(), true));
+            }
+
+            while ($position = sqlsrv_fetch_array($positionStmt, SQLSRV_FETCH_ASSOC)) {
+              $selected = ($position['PositionID'] == $player['PositionID']) ? 'selected' : '';
+              echo '<option value="' . $position['PositionID'] . '" ' . $selected . '>' . $position['PositionName'] . '</option>';
+            }
+            ?>
+          </select>
         </div>
         <input type="hidden" name="teamID" value="<?php echo $_GET["TeamID"] ?>">
         <button type="submit" class="btn btn-success mt-2">新增</button>

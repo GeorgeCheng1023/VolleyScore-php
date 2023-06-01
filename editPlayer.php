@@ -7,7 +7,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
   <?php include "components/header.php"; ?>
 
   <div class="container">
-    <h1>Edit Player</h1>
+    <h1>編輯隊員</h1>
     <hr>
 
     <?php
@@ -58,16 +58,32 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
 
     <!-- Display the player edit form -->
     <form action="" method="POST">
-      <div class="form-group">
-        <label for="playerName">Player Name:</label>
-        <input type="text" class="form-control" id="playerName" name="playerName" value="<?php echo $player['PlayerName']; ?>" required>
+      <div class="form-group mt-2">
+        <label for="playerName">名稱:</label>
+        <input type="text" class="form-control mt-1" id="playerName" name="playerName" value="<?php echo $player['PlayerName']; ?>" required>
       </div>
-      <div class="form-group">
-        <label for="positionID">Position ID:</label>
-        <input type="number" class="form-control" id="positionID" name="positionID" value="<?php echo $player['PositionID']; ?>" required>
+      <div class="form-group mt-2">
+        <label for="positionID">職位:</label>
+        <select class="form-control form-select mt-1" id="positionID" name="positionID" required>
+          <?php
+          // Display position options
+          include($_SERVER['DOCUMENT_ROOT'] . '/utils/db_connect.php');
+          $positionSql = "SELECT PositionID, PositionName FROM Position";
+          $positionStmt = sqlsrv_query($conn, $positionSql);
+          // Check if the query execution is successful
+          if ($positionStmt === false) {
+            die(print_r(sqlsrv_errors(), true));
+          }
+
+          while ($position = sqlsrv_fetch_array($positionStmt, SQLSRV_FETCH_ASSOC)) {
+            $selected = ($position['PositionID'] == $player['PositionID']) ? 'selected' : '';
+            echo '<option value="' . $position['PositionID'] . '" ' . $selected . '>' . $position['PositionName'] . '</option>';
+          }
+          ?>
+        </select>
       </div>
       <input type="hidden" name="teamID" value="<?php echo $_GET["TeamID"] ?>">
-      <button type="submit" class="btn btn-primary">Save Changes</button>
+      <button type="submit" class="btn btn-primary mt-2">Save Changes</button>
     </form>
   </div>
   <?php
