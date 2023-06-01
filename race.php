@@ -7,6 +7,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
   <?php include "components/header.php"; ?>
   <div class="container">
     <h1>Team Games</h1>
+    <?php echo "<a  href='newRace.php?TeamID=" . $_GET['TeamID'] . "' class='btn btn-primary'>新增比賽</a>" ?>
     <hr>
 
     <?php
