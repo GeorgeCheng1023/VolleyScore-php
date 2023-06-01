@@ -1,7 +1,7 @@
 <?php
 header("Content-Type:text/html; charset=utf-8");
 $serverName = "GEORGE-SWIFT3\SQLEXPRESS";
-$connectionInfo = array("Database" => "Volleyball", "UID" => "sa", "PWD" => "123", "CharacterSet" => "UTF-8");
+$connectionInfo = array("Database" => "Volleyball", "UID" => "ck40292", "PWD" => "123", "CharacterSet" => "UTF-8");
 $conn = sqlsrv_connect($serverName, $connectionInfo);
 if ($conn) {
     echo "Connect Success!!!<br />";
