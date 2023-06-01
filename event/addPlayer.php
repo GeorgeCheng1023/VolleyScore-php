@@ -1,5 +1,5 @@
 <?php
-include 'db_connect.php';
+include($_SERVER['DOCUMENT_ROOT'] . '/utils/db_connect.php');
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // Get the form data
@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
 
   // Redirect back to the player management page
-  header("Location: player.php?TeamID=" . $teamID);
+  header("Location: /player.php?TeamID=" . $teamID);
 }
 
 // Close the database connection

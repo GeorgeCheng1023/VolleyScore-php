@@ -7,7 +7,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
 <body id="wrapper">
   <?php include "components\header.php"; ?>
   <?php
-  include 'db_connect.php';
+  include 'utils/db_connect.php';
   $teamname = $_POST["TeamName"];
   $teamId = $_POST["TeamID"];
   $sql = "UPDATE dbo.Teams SET TeamName= '$teamname' WHERE TeamID='$teamId' ";
