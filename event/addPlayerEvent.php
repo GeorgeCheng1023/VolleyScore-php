@@ -5,14 +5,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // Get the form data
   $playerNumber = $_POST["playerNumber"];
   $playerName = $_POST["playerName"];
-  $positionID = $_POST["positionID"];
   $teamID = $_POST["teamID"];
 
   // Prepare the SQL statement to insert a new player
-  $sql = "INSERT INTO Player (PlayerNumber, PlayerName, PositionID, TeamID) VALUES (?, ?, ?, ?)";
+  $sql = "INSERT INTO Player (PlayerNumber, PlayerName, TeamID) VALUES (?, ?,  ?)";
 
   // Prepare and execute the statement
-  $params = array($playerNumber, $playerName, $positionID, $teamID);
+  $params = array($playerNumber, $playerName, $teamID);
   $stmt = sqlsrv_prepare($conn, $sql, $params);
   echo $stmt;
 

@@ -14,8 +14,10 @@
             編輯資料
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="team.php">管理隊伍</a></li>
-            <li><a class="dropdown-item" href="player.php?TeamID=1">管理球員</a></li>
+            <li><a class="dropdown-item" href="team.php?TeamID=<?php echo $_GET['TeamID'] ?>">管理隊伍</a></li>
+            <li><a class="dropdown-item" href="player.php?TeamID=<?php echo $_GET['TeamID'] ?>">
+                管理球員
+              </a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
@@ -23,9 +25,13 @@
           </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="race.php?TeamID=1">比賽系統</a>
+          <a class="nav-link" aria-current="page" href="race.php?TeamID=<?php echo $_GET['TeamID'] ?>">比賽系統</a>
         </li>
       </ul>
+
+      <a href="login.php" class="btn btn-primary">
+        登入
+      </a>
 
     </div>
   </div>
