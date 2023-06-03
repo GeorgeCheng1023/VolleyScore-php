@@ -1,17 +1,34 @@
 <?php
-include($_SERVER['DOCUMENT_ROOT'] . '/utils/db_connect.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
+?>
+</head>
+
+<body id="wrapper">
+  <?php include "components/header.php"; ?>
 
 
-$playerNumber = $_GET['PlayerNumber'];
+  <?php
+  if (isset($_GET['playerID'])) {
+    $playerID = $_GET['playerID'];
 
-$sql = "DELETE FROM Player WHERE PlayerNumber = ? AND TeamID = ?";
-$params = array($playerNumber, $teamID);
-$stmt = sqlsrv_query($conn, $sql, $params);
-// Check if the delete was successful
-if ($stmt === false) {
-  die(print_r(sqlsrv_errors(), true));
-}
 
-// Redirect back to the player list page
-header("Location: /player.php?TeamID=" . $teamID);
-sqlsrv_close($conn);
+    // 删除球员信息
+    $deletePlayerStmt = sqlsrv_prepare($conn, "DELETE FROM Player WHERE PlayerID = ?", array(&$playerID));
+    sqlsrv_execute($deletePlayerStmt);
+
+    // 删除球员的职位信息
+    $deletePlayerPositionStmt = sqlsrv_prepare($conn, "DELETE FROM PlayerPosition WHERE PlayerID = ?", array(&$playerID));
+    sqlsrv_execute($deletePlayerPositionStmt);
+
+    // 关闭数据库连接
+    sqlsrv_close($conn);
+
+    // 重定向回 players.php
+    header("Location: /player.php");
+    exit();
+  }
+  ?>
+
+  <?php
+  include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/foot.php');
+  ?>

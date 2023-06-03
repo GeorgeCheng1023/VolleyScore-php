@@ -28,8 +28,8 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
           $positionName = $row['PositionName'];
 
           // 生成職位的 checkbox
-          echo '<div class="checkbox">';
-          echo '<label><input type="checkbox" name="positions[]" value="' . $positionID . '">' . $positionName . '</label>';
+          echo '<div class="form-check">';
+          echo '<label class="form-check-label"><input class="form-check-input" type="checkbox" name="positions[]" value="' . $positionID . '">' . $positionName . '</label>';
           echo '</div>';
         }
         ?>
@@ -63,7 +63,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
       echo '<td>' . $playerNumber . '</td>';
       echo '<td>' . $playerName . '</td>';
       echo '<td>' . implode(', ', $positions) . '</td>';
-      echo '<td><a href="edit_player.php?playerID=' . $playerID . '">編輯</a> | <a href="delete_player.php?playerID=' . $playerID . '">刪除</a></td>';
+      echo '<td><a href="editPlayer.php?playerID=' . $playerID . '">編輯</a> | <a href="event/deletePlayerEvent.php?playerID=' . $playerID . '">刪除</a></td>';
       echo '</tr>';
     }
 

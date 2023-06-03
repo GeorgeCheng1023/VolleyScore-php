@@ -14,8 +14,8 @@
             編輯資料
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="team.php?TeamID=<?php echo $_GET['TeamID'] ?>">管理隊伍</a></li>
-            <li><a class="dropdown-item" href="player.php?TeamID=<?php echo $_GET['TeamID'] ?>">
+            <li><a class="dropdown-item" href="team.php">管理隊伍</a></li>
+            <li><a class="dropdown-item" href="player.php">
                 管理球員
               </a></li>
             <li>

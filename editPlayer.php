@@ -6,86 +6,97 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
 <body id="wrapper">
   <?php include "components/header.php"; ?>
 
-  <div class="container">
-    <h1>編輯隊員</h1>
-    <hr>
+  <!-- Post update event -->
+  <?php
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['playerID']) && isset($_POST['playerNumber']) && isset($_POST['playerName']) && isset($_POST['positions'])) {
+      $playerID = $_POST['playerID'];
+      $playerNumber = $_POST['playerNumber'];
+      $playerName = $_POST['playerName'];
+      $positions = $_POST['positions'];
 
-    <?php
-    include($_SERVER['DOCUMENT_ROOT'] . '/utils/db_connect.php');
-    // Retrieve player number from URL parameter
-    $playerNumber = $_GET['PlayerNumber'];
-    $teamID = $_GET['TeamID'];
+      // 更新球员信息
+      $updatePlayerStmt = sqlsrv_prepare($conn, "UPDATE Player SET PlayerNumber = ?, PlayerName = ? WHERE PlayerID = ?", array(&$playerNumber, &$playerName, &$playerID));
+      sqlsrv_execute($updatePlayerStmt);
 
-    // Retrieve player data from the database
-    $sql = "SELECT PlayerNumber, PlayerName, PositionID FROM Player WHERE PlayerNumber = ? AND TeamID = ? ";
-    $params = array($playerNumber, $teamID);
-    $stmt = sqlsrv_query($conn, $sql, $params);
+      // 删除之前的职位信息
+      $deletePlayerPositionStmt = sqlsrv_prepare($conn, "DELETE FROM PlayerPosition WHERE PlayerID = ?", array(&$playerID));
+      sqlsrv_execute($deletePlayerPositionStmt);
 
-    // Check if the query execution is successful
-    if ($stmt === false) {
-      die(print_r(sqlsrv_errors(), true));
-    }
-
-    // Fetch the player data
-    $player = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
-
-    // Check if the player exists
-    if ($player === false) {
-      die("Player not found.");
-    }
-
-    // Handle the form submission
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      // Get the updated player name and position from the form
-      $updatedPlayerName = $_POST['playerName'];
-      $updatedPositionID = $_POST['positionID'];
-
-      // Update the player's name and position in the database
-      $updateSql = "UPDATE Player SET PlayerName = ?, PositionID = ? WHERE PlayerNumber = ? AND TeamID = ?";
-      $updateParams = array($updatedPlayerName, $updatedPositionID, $playerNumber, $teamID);
-      $updateStmt = sqlsrv_query($conn, $updateSql, $updateParams);
-
-      // Check if the update was successful
-      if ($updateStmt === false) {
-        die(print_r(sqlsrv_errors(), true));
+      // 插入新的职位信息
+      $insertPlayerPositionStmt = sqlsrv_prepare($conn, "INSERT INTO PlayerPosition (PlayerID, PositionID) VALUES (?, ?)", array(&$playerID, &$position));
+      foreach ($positions as $position) {
+        sqlsrv_execute($insertPlayerPositionStmt);
       }
+      header("Location: /editPlayer.php?playerID=" . $playerID);
 
-      // Redirect back to the player list page
-      header("Location: player.php?TeamID=" .  $teamID);
       exit();
     }
-    ?>
+  }
+  ?>
 
-    <!-- Display the player edit form -->
-    <form action="" method="POST">
-      <div class="form-group mt-2">
-        <label for="playerName">名稱:</label>
-        <input type="text" class="form-control mt-1" id="playerName" name="playerName" value="<?php echo $player['PlayerName']; ?>" required>
-      </div>
-      <div class="form-group mt-2">
-        <label for="positionID">職位:</label>
-        <select class="form-control form-select mt-1" id="positionID" name="positionID" required>
+
+  <?php
+  if (isset($_GET['playerID'])) {
+    $playerID = $_GET['playerID'];
+
+    // 根據 playerID 查詢球員信息
+    $playerQuery = sqlsrv_query($conn, "SELECT * FROM Player WHERE PlayerID = $playerID");
+    $player = sqlsrv_fetch_array($playerQuery, SQLSRV_FETCH_ASSOC);
+
+    // 根據 playerID 查詢球員的職位
+    $playerPositionsQuery = sqlsrv_query($conn, "SELECT PositionID FROM PlayerPosition WHERE PlayerID = $playerID");
+    $selectedPositions = array();
+    while ($row = sqlsrv_fetch_array($playerPositionsQuery, SQLSRV_FETCH_ASSOC)) {
+      $selectedPositions[] = $row['PositionID'];
+    }
+
+    // 從 Position 表中獲取所有職位
+    $positionsQuery = sqlsrv_query($conn, "SELECT * FROM Position");
+    $positions = array();
+    while ($row = sqlsrv_fetch_array($positionsQuery, SQLSRV_FETCH_ASSOC)) {
+      $positions[] = $row;
+    }
+
+  ?>
+
+    <div class="container">
+      <h2>編輯球員</h2>
+      <form action="" method="post">
+        <input type="hidden" name="playerID" value="<?php echo $player['PlayerID']; ?>">
+        <div class="form-group">
+          <label for="playerNumber">球員編號:</label>
+          <input type="text" class="form-control" id="playerNumber" name="playerNumber" value="<?php echo $player['PlayerNumber']; ?>">
+        </div>
+        <div class="form-group">
+          <label for="playerName">球員名稱:</label>
+          <input type="text" class="form-control" id="playerName" name="playerName" value="<?php echo $player['PlayerName']; ?>">
+        </div>
+        <div class="form-group">
+          <label for="positions">職位:</label>
           <?php
-          // Display position options
-          include($_SERVER['DOCUMENT_ROOT'] . '/utils/db_connect.php');
-          $positionSql = "SELECT PositionID, PositionName FROM Position";
-          $positionStmt = sqlsrv_query($conn, $positionSql);
-          // Check if the query execution is successful
-          if ($positionStmt === false) {
-            die(print_r(sqlsrv_errors(), true));
-          }
+          foreach ($positions as $position) {
+            $positionID = $position['PositionID'];
+            $positionName = $position['PositionName'];
+            $checked = in_array($positionID, $selectedPositions) ? 'checked' : '';
 
-          while ($position = sqlsrv_fetch_array($positionStmt, SQLSRV_FETCH_ASSOC)) {
-            $selected = ($position['PositionID'] == $player['PositionID']) ? 'selected' : '';
-            echo '<option value="' . $position['PositionID'] . '" ' . $selected . '>' . $position['PositionName'] . '</option>';
+            echo '<div class="form-check">';
+            echo '<label class="form-check-label"><input class="form-check-input" type="checkbox" name="positions[]" value="' . $positionID . '" ' . $checked . '>' . $positionName . '</label>';
+            echo '</div >';
           }
           ?>
-        </select>
-      </div>
-      <input type="hidden" name="teamID" value="<?php echo $_GET["TeamID"] ?>">
-      <button type="submit" class="btn btn-primary mt-2">Save Changes</button>
-    </form>
-  </div>
+        </div>
+        <button type="submit" class="btn btn-primary">更新</button>
+      </form>
+    </div>
+    <?php
+    include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/foot.php');
+    ?>
+
+
+
   <?php
-  include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/foot.php');
+  } else {
+    echo '未提供球員ID。';
+  }
   ?>
