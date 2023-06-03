@@ -42,7 +42,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
             <div class="form-group row mb-2 mt-4">
                 <label for="TeamID" class="col-sm-2 col-form-label">隊伍編號</label>
                 <div class="col-sm-10">
-                    <input disabled type="text" name="TeamID" class="form-control disabled" id="TeamID" value="<?php echo $_GET["TeamID"] ?>">
+                    <input disabled type="text" name="TeamID" class="form-control disabled" id="TeamID" value="<?php echo $_COOKIE["teamID"] ?>">
                 </div>
             </div>
 

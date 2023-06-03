@@ -7,14 +7,14 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
   <?php include "components/header.php"; ?>
   <div class="container">
     <h1>Team Games</h1>
-    <?php echo "<a  href='newRace.php?TeamID=" . $_GET['TeamID'] . "' class='btn btn-primary'>新增比賽</a>" ?>
+    <?php echo "<a  href='newRace.php?TeamID=" . $_COOKIE['teamID'] . "' class='btn btn-primary'>新增比賽</a>" ?>
     <hr>
 
     <?php
     include($_SERVER['DOCUMENT_ROOT'] . '/utils/db_connect.php');
 
     // Retrieve team ID from URI parameter
-    $teamID = $_GET['TeamID'];
+    $teamID = $_COOKIE['teamID'];
 
     // Retrieve team name from the database
     $teamSql = "SELECT Name FROM Team WHERE TeamID = ?";

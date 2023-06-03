@@ -13,7 +13,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
         <label for="teamID">隊伍ID:</label>
         <input type="text" class="form-control" id="teamID" name="teamID" required>
       </div>
-      <button type="submit" class="btn btn-primary">登入</button>
+      <button type="submit" class="btn btn-primary mt-2">登入</button>
     </form>
   </div>
 
