@@ -28,7 +28,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
       foreach ($positions as $position) {
         sqlsrv_execute($insertPlayerPositionStmt);
       }
-      header("Location: /editPlayer.php?playerID=" . $playerID);
+      header("Location: /player.php" . $playerID);
 
       exit();
     }
