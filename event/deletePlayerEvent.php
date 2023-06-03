@@ -3,7 +3,6 @@ include($_SERVER['DOCUMENT_ROOT'] . '/utils/db_connect.php');
 
 
 $playerNumber = $_GET['PlayerNumber'];
-$teamID = $_GET['TeamID'];
 
 $sql = "DELETE FROM Player WHERE PlayerNumber = ? AND TeamID = ?";
 $params = array($playerNumber, $teamID);

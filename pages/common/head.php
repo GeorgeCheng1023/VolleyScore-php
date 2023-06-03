@@ -1,4 +1,7 @@
-<?php session_start(); ?>
+<?php
+session_start();
+include($_SERVER['DOCUMENT_ROOT'] . '/utils/db_connect.php');
+?>
 <!DOCTYPE html>
 <html>
 

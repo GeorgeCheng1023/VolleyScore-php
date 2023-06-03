@@ -1,36 +1,36 @@
-<?php
-include($_SERVER['DOCUMENT_ROOT'] . '/utils/db_connect.php');
-// Check if the form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  // Get the form data
-  $playerNumber = $_POST["playerNumber"];
-  $playerName = $_POST["playerName"];
-  $teamID = $_POST["teamID"];
 
-  // Prepare the SQL statement to insert a new player
-  $sql = "INSERT INTO Player (PlayerNumber, PlayerName, TeamID) VALUES (?, ?,  ?)";
 
-  // Prepare and execute the statement
-  $params = array($playerNumber, $playerName, $teamID);
-  $stmt = sqlsrv_prepare($conn, $sql, $params);
-  echo $stmt;
+  <?php
+  include($_SERVER['DOCUMENT_ROOT'] . '/utils/db_connect.php');
+  // 確保提交的表單數據存在
+  if (isset($_POST['playerNumber']) && isset($_POST['playerName']) && isset($_POST['positions'])) {
+    // 獲取表單數據
+    $playerNumber = $_POST['playerNumber'];
+    $playerName = $_POST['playerName'];
+    $positions = $_POST['positions'];
+    $teamID = $_COOKIE["teamID"];
 
-  // Check if the statement preparation is successful
-  if ($stmt === false) {
-    die(print_r(sqlsrv_errors(), true));
+    // 插入新球員的數據到 Player 表
+    $query = "INSERT INTO Player (PlayerNumber, PlayerName, TeamID) VALUES (?, ?, ?); 
+    SELECT SCOPE_IDENTITY() AS PlayerID";
+
+    $params = array(&$playerNumber, &$playerName, &$teamID);
+
+    $resource = sqlsrv_query($conn, $query, $params);
+    sqlsrv_next_result($resource);
+    sqlsrv_fetch($resource);
+    $playerID = sqlsrv_get_field($resource, 0);
+
+    // 將球員的職位插入到 PlayerPosition 表
+    $insertPlayerPositionStmt = sqlsrv_prepare($conn, "INSERT INTO PlayerPosition (PlayerID, PositionID) VALUES (?, ?)", array(&$playerID, &$position));
+    foreach ($positions as $position) {
+      sqlsrv_execute($insertPlayerPositionStmt);
+    }
+
+
+    // 重定向回 players.php
+    header("Location: /player.php");
+    exit();
   }
+  ?>
 
-  // Execute the statement
-  $result = sqlsrv_execute($stmt);
-
-  // Check if the execution is successful
-  if ($result === false) {
-    die(print_r(sqlsrv_errors(), true));
-  }
-
-  // Redirect back to the player management page
-  header("Location: /player.php?TeamID=" . $teamID);
-}
-
-// Close the database connection
-sqlsrv_close($conn);

@@ -10,9 +10,8 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
     <?php
     include($_SERVER['DOCUMENT_ROOT'] . '/utils/db_connect.php');
 
-    $teamID = $_GET['TeamID'];
     $sql = 'SELECT Name FROM Team WHERE TeamID = ?';
-    $params = array($teamID);
+    $params = array($_COOKIE["teamID"]);
     $stmt = sqlsrv_query($conn, $sql, $params);
     if ($stmt === false) {
         die(print_r(sqlsrv_errors(), true));
@@ -24,7 +23,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
     // post update team name
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $teamname = $_POST["TeamName"];
-        $teamId = $_GET["TeamID"];
+        $teamId =  $_COOKIE["teamID"];
         $sql = "UPDATE Team SET Name= '$teamname' WHERE TeamID='$teamId' ";
         $query = sqlsrv_query($conn, $sql, $updateParams);
         if ($query === false) {
@@ -60,8 +59,6 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
                 </div>
             </div>
         </form>
-
-
 
 
     </div>

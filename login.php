@@ -43,6 +43,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
       sqlsrv_free_stmt($stmt);
       sqlsrv_close($conn);
       header("Location: index.php?TeamID=" . $teamID);
+      setcookie("teamID", $teamID, time() + 3600);
       exit;
     }
 
@@ -55,10 +56,13 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
       die(print_r(sqlsrv_errors(), true));
     }
 
+
     sqlsrv_free_stmt($stmt);
     sqlsrv_close($conn);
 
-    header("Location: team.php?TeamID=" . $teamID);
+    setcookie("teamID", $teamID, time() + 3600);
+
+    header("Location: team.php?TeamID=" . $_COOKIE("teamID"));
     exit;
   }
   ?>
