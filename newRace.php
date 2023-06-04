@@ -1,4 +1,5 @@
 <?php
+include($_SERVER['DOCUMENT_ROOT'] . '/utils/db_connect.php');
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // Retrieve the form inputs
   $gameName = $_POST["gameName"];

@@ -80,6 +80,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
           <th>我方得分</th>
           <th>敵方得分</th>
           <th>勝敗</th>
+          <th>控制</th>
         </tr>
       </thead>
       <tbody>
@@ -94,6 +95,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
           echo '<td>' . $game['YourScore'] . '</td>';
           echo '<td>' . $game['OppositeScore'] . '</td>';
           echo '<td class="fw-bold text-' .  (($game['YourScore'] > $game['OppositeScore']) ? 'success' : 'danger') . '">' . (($game['YourScore'] > $game['OppositeScore']) ? 'Win' : 'Lose') .  "</td>";
+          echo '<td><a href="editRace.php?gameID=' . $game['GameID'] . '">編輯</a> </td>';
           echo '</tr>';
         }
         ?>
