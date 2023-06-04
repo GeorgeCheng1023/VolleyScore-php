@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // Insert the selected players into the GamePlayerPosition table
   $stmt = sqlsrv_prepare(
     $conn,
-    "INSERT INTO GamePlayerPosition (GameID, TeamID, PlayerID) VALUES (?, ?, ?)",
+    "INSERT INTO GamePlayerPosition (GameID, TeamID, PlayerPositionID) VALUES (?, ?, ?)",
     array($gameID, $_COOKIE['teamID'], &$player)
   );
   foreach ($players as $player) {
@@ -78,7 +78,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
         <label for="players">Select Players</label><br>
         <?php
         // Prepare the SQL query to fetch players and their positions for the team
-        $sql = "SELECT p.PlayerID, p.PlayerName, pos.PositionName
+        $sql = "SELECT  p.PlayerName, pos.PositionName, pp.PlayerPositionID
                         FROM Player p
                         INNER JOIN PlayerPosition pp ON p.PlayerID = pp.PlayerID
                         INNER JOIN Position pos ON pp.PositionID = pos.PositionID
@@ -88,8 +88,8 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
         // Display the players and their positions with checkboxes for player selection
         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
           echo "<div class='form-check'>";
-          echo "<input class='form-check-input' type='checkbox' id='player" . $row['PlayerID'] . "' name='players[]' value='" . $row['PlayerID'] . "'>";
-          echo "<label class='form-check-label' for='player" . $row['PlayerID'] . "'>" . $row['PlayerName'] . " - " . $row['PositionName'] . "</label>";
+          echo "<input class='form-check-input' type='checkbox' id='player" . $row['PlayerPositionID'] . "' name='players[]' value='" . $row['PlayerPositionID'] . "'>";
+          echo "<label class='form-check-label' for='player" . $row['PlayerPositionID'] . "'>" . $row['PlayerName'] . " - " . $row['PositionName'] . "</label>";
           echo "</div>";
         }
         ?>

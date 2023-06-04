@@ -89,74 +89,149 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
   </div>
 
 
-  <?php
-  // Retrieve the game ID from the URI
-  $gameID = $_GET['gameID'];
+  <div class="container">
 
-  // Retrieve the scores from the Score table
-  $sql = "SELECT * FROM Score";
-  $stmt = sqlsrv_query($conn, $sql);
+    <?php
+    // Retrieve the game ID from the URI
+    $gameID = $_GET['gameID'];
+    echo '<form action="recordRace.php?gameID=' . $gameID . '" method="POST">';
 
-  echo "<h2>Play-by-Play Recording</h2>";
 
-  // Display the score buttons
-  echo "<h4>Scores:</h4>";
-  while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-    $scoreID = $row['ScoreID'];
-    $scoreName = $row['ScoreName'];
-    $scoreType = $row['ScoreType'];
+    // Retrieve the participating players for the game
+    $sql = "SELECT p.PlayerName, pos.PositionName, gpp.GamePlayerPositionID
+  FROM GamePlayerPosition gpp
+  INNER JOIN PlayerPosition as pp ON pp.PlayerPositionID = gpp.PlayerPositionID
+  INNER JOIN Player p ON p.PlayerID = pp.PlayerID
+  INNER JOIN Position pos ON pos.PositionID = pp.PositionID
+  WHERE gpp.GameID = ?";
+    $params = array($gameID);
+    $stmt = sqlsrv_query($conn, $sql, $params);
 
-    echo "<button class='record-button btn btn-success' onclick='recordPlay($scoreID)'>$scoreName</button>";
-  }
-  echo "<br><br>";
+    echo "<h4>Players:</h4>";
+    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+      $playerName = $row['PlayerName'];
+      $positionName = $row['PositionName'];
+      $gamePlayerPositionID = $row['GamePlayerPositionID'];
 
-  // Retrieve the participating players for the game
-  $sql = "SELECT p.PlayerID, p.PlayerName
-                FROM Player p
-                INNER JOIN GamePlayerPosition gpp ON p.PlayerID = gpp.PlayerID
-                WHERE gpp.GameID = ?";
-  $params = array($gameID);
-  $stmt = sqlsrv_query($conn, $sql, $params);
+      echo "<div class='form-check'>";
+      echo "<input class='form-check-input' id='player-$gamePlayerPositionID'  required type='radio' name='gamePlayerPositionID' value='$gamePlayerPositionID'> ";
+      echo "<label class='form-check-label' for='player-$gamePlayerPositionID' >$playerName - $positionName</label>";
+      echo "</div><br>";
+    }
 
-  echo "<h4>Players:</h4>";
-  echo "<form method='POST' action='record_play.php'>";
-  while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-    $playerID = $row['PlayerID'];
-    $playerName = $row['PlayerName'];
 
-    echo "<label>";
-    echo "<input type='radio' name='playerID' value='$playerID'> $playerName";
-    echo "</label><br>";
-  }
+    // Retrieve the scores from the Score table
+    $sql = "SELECT * FROM Score";
+    $stmt = sqlsrv_query($conn, $sql);
 
-  // Add hidden input fields for game ID and team ID
-  echo "<input type='hidden' name='gameID' value='$gameID'>";
-  echo "<input type='hidden' name='teamID' value='A'>";
+    echo "<h4>Scores:</h4>";
 
-  ?>
-  <br>
-  <button type='submit' class='btn btn-primary'>Record Play</button>
-  </form>
+    // Store the scores grouped by score type
+    $scores = array();
+
+    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+      $scoreID = $row['ScoreID'];
+      $scoreName = $row['ScoreName'];
+      $scoreType = $row['ScoreType'];
+
+      // Store each score in the corresponding score type group
+      if (!isset($scores[$scoreType])) {
+        $scores[$scoreType] = array();
+      }
+
+      $scores[$scoreType][] = array(
+        'scoreID' => $scoreID,
+        'scoreName' => $scoreName
+      );
+    }
+
+    // Display the button group for each score type
+    foreach ($scores as $scoreType => $scoreList) {
+      // Set the button group color based on the score type
+      $buttonColor = '';
+      if ($scoreType == '得分') {
+        $buttonColor = 'btn-primary';
+      } elseif ($scoreType == '失誤') {
+        $buttonColor = 'btn-warning';
+      } else {
+        $buttonColor = 'btn-danger';
+      }
+
+      echo "<div class='btn-group mb-2' role='group'>";
+      echo "<button type='button' class='btn $buttonColor ' disabled>$scoreType</button>";
+
+      foreach ($scoreList as $score) {
+        $scoreID = $score['scoreID'];
+        $scoreName = $score['scoreName'];
+
+        echo "<button type='submit' name='scoreID' value='$scoreID' class='record-button btn $buttonColor'>$scoreName</button>";
+      }
+
+      echo "</div>";
+    }
+
+    echo "<br><br>";
+
+    ?>
+    <br>
+    </form>
   </div>
 
-  <script>
-    function recordPlay(scoreID) {
-      const gameID = <?php echo $gameID; ?>;
-      const teamID = 'A'; // Assuming team ID is 'A' for demonstration purposes
+  <div class="container">
 
-      // Send an AJAX request to record_play.php
-      fetch('record_play.php?gameID=' + gameID + '&teamID=' + teamID + '&scoreID=' + scoreID)
-        .then(response => response.text())
-        .then(data => {
-          console.log(data);
-          // Reload the page after recording the play
-          location.reload();
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
+    <?php
+    // Retrieve the game ID from the query parameters
+    $gameID = $_GET['gameID'];
+
+    // Retrieve the play-by-play details based on the game ID
+    $sql = "SELECT p.PlayerName, pos.PositionName, s.ScoreType, s.ScoreName, pbp.TeamAScore, pbp.TeamBScore
+  FROM PlayByPlay pbp
+  INNER JOIN GamePlayerPosition gpp ON gpp.GamePlayerPositionID = pbp.GamePlayerPositionID
+  INNER JOIN PlayerPosition pp ON pp.PlayerPositionID = gpp.PlayerPositionID
+  INNER JOIN Player p ON p.PlayerID = pp.PlayerID
+  INNER JOIN Position pos ON pos.PositionID = pp.PositionID
+  INNER JOIN Score s ON pbp.ScoreID = s.ScoreID
+  WHERE gpp.GameID = ?";
+    $params = array($gameID);
+    $stmt = sqlsrv_query($conn, $sql, $params);
+
+    if ($stmt === false) {
+      echo "Error retrieving play-by-play details: " . print_r(sqlsrv_errors(), true);
+    } else {
+      // Display the play-by-play details in a table
+      echo "<table class='table table-bordered'>
+            <thead>
+              <tr>
+                  <th>球員名稱</th>
+                  <th>位置</th>
+                  <th>得失分</th>
+                  <th>得失分名稱</th>
+                  <th>Team A Score</th>
+                  <th>Team B Score</th>
+              </tr>
+            </thead>
+            ";
+
+      while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+        echo "<tbody>";
+        echo "<tr>";
+        echo "<td>" . $row['PlayerName'] . "</td>";
+        echo "<td>" . $row['PositionName'] . "</td>";
+        echo "<td>" . $row['ScoreType'] . "</td>";
+        echo "<td>" . $row['ScoreName'] . "</td>";
+        echo "<td>" . $row['TeamAScore'] . "</td>";
+        echo "<td>" . $row['TeamBScore'] . "</td>";
+        echo "</tr>";
+        echo "</tbody>";
+      }
+
+      echo "</table>";
     }
-  </script>
+
+    ?>
+  </div>
+
+  </div>
 
 
 
