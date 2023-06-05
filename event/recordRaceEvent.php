@@ -30,7 +30,7 @@ if ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
   echo "Game not found.";
 }
 
-header('Location: /editRace.php?gameID=' . $gameID);
+header('Location: /recordRace.php?gameID=' . $gameID);
 
 // Close the SQL Server connection
 sqlsrv_close($conn);
