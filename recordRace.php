@@ -68,7 +68,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
       $gameName =  $row['Name'];
       $gameTime = $row['Time']->format('Y-m-d H:i:s');
 
-      echo "<h2>比賽紀錄</h2>";
+      echo "<h2>比賽紀錄<a href='reportRace.php?gameID=$gameID' class='btn btn-primary'>查看報表</a></h2>";
       echo "<h3> $gameName - $gameTime</h3>";
       echo "<div class='score'>";
       echo "<div class='score_block'>";
