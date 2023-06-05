@@ -17,7 +17,6 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
 
     #hero:before {
         content: "";
-        background: rgba(255, 255, 255, 0.8);
         position: absolute;
         bottom: 0;
         top: 0;
@@ -34,12 +33,10 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
         font-size: 56px;
         font-weight: 700;
         line-height: 72px;
-        color: #124265;
         font-family: "Poppins", sans-serif;
     }
 
     #hero h2 {
-        color: #5e5e5e;
         margin: 10px 0 0 0;
         font-size: 22px;
     }
@@ -70,23 +67,14 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
         padding: 50px 30px;
         position: relative;
         overflow: hidden;
-        background: #fff;
-        box-shadow: 0 0 29px 0 rgba(18, 66, 101, 0.08);
         transition: all 0.3s ease-in-out;
-        border-radius: 8px;
         z-index: 1;
     }
 
     #hero .icon-box .title {
-        font-weight: 700;
-        margin-bottom: 15px;
-        font-size: 18px;
+        font-weight: bold;
     }
 
-    #hero .icon-box .title a {
-        color: #124265;
-        transition: 0.3s;
-    }
 
     #hero .icon-box .description {
         font-size: 15px;
@@ -141,6 +129,38 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
     }
 </style>
 
+<style>
+    .hover {
+        color: #0000;
+        background:
+            linear-gradient(90deg, #1095c1 50%, #000 0) var(--_p, 100%)/200% no-repeat;
+        -webkit-background-clip: text;
+        background-clip: text;
+        transition: .4s;
+    }
+
+    .hover:hover {
+        --_p: 0%;
+    }
+
+    .hover-4 {
+        border: 8px solid;
+        border-image: repeating-linear-gradient(135deg, #F8CA00 0 10px, #E97F02 0 20px, #BD1550 0 30px) 8;
+        -webkit-mask:
+            conic-gradient(from 180deg at top 8px right 8px, #0000 90deg, #000 0) var(--_i, 200%) 0 /200% var(--_i, 8px) border-box no-repeat,
+            conic-gradient(at bottom 8px left 8px, #0000 90deg, #000 0) 0 var(--_i, 200%)/var(--_i, 8px) 200% border-box no-repeat,
+            linear-gradient(#000 0 0) padding-box no-repeat;
+        transition: .3s, -webkit-mask-position .3s .3s;
+    }
+
+    .hover-4:hover {
+        --_i: 100%;
+        color: yellow;
+        transition: .3s, -webkit-mask-size .3s .3s;
+    }
+</style>
+
+
 </head>
 
 
@@ -169,34 +189,34 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
                         ?> class="btn btn-primary p-3 mt-3 fs-4">立即開始</a>
             </div>
 
-            <div class="row icon-boxes">
-                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="zoom-in" data-aos-delay="200">
+            <div class="row icon-boxes gx-5">
+                <div class="hover-4 col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="zoom-in" data-aos-delay="200">
                     <div class="icon-box">
-                        <div class="icon"><i class="ri-stack-line"></i></div>
-                        <h4 class="title"><a href="team.php">編輯隊伍</a></h4>
+                        <div class="icon"><i class="bi bi-vector-pen"></i></i></div>
+                        <h4 class="hover title"><a href="team.php">編輯隊伍</a></h4>
                         <p class="description">更改隊伍名稱、設定隊員的職位與球號</p>
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="zoom-in" data-aos-delay="300">
+                <div class="hover-4 col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="zoom-in" data-aos-delay="300">
                     <div class="icon-box">
-                        <div class="icon"><i class="ri-palette-line"></i></div>
-                        <h4 class="title"><a href="race.php">比賽系統</a></h4>
+                        <div class="icon"><i class="bi bi-journal-text"></i></div>
+                        <h4 class="hover title"><a href="race.php">比賽系統</a></h4>
                         <p class="description">創建、紀錄每一局比賽的得失分狀況</p>
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="zoom-in" data-aos-delay="400">
+                <div class="hover-4 col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="zoom-in" data-aos-delay="400">
                     <div class="icon-box">
-                        <div class="icon"><i class="ri-command-line"></i></div>
-                        <h4 class="title"><a href="analyze.php">球員分析</a></h4>
+                        <div class="icon"><i class="bi bi-bar-chart-line"></i></i></div>
+                        <h4 class="hover title"><a href="analyze.php">球員分析</a></h4>
                         <p class="description">分析球員的得分與防守率，找出問題，並設計練習方式!</p>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="zoom-in" data-aos-delay="400">
+                <div class="hover-4 col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="zoom-in" data-aos-delay="400">
                     <div class="icon-box">
-                        <div class="icon"><i class="ri-command-line"></i></div>
-                        <h4 class="title"><a href="tutor.php">使用手冊</a></h4>
+                        <div class="icon"><i class="bi bi-book"></i></div>
+                        <h4 class="hover title"><a href="tutor.php">使用手冊</a></h4>
                         <p class="description">不知道如何開始嗎? 點擊此處看看教學!</p>
                     </div>
                 </div>

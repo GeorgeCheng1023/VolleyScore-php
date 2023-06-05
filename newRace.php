@@ -41,12 +41,13 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
 ?>
 </head>
 
+
 <body id="wrapper">
   <?php include "components/header.php"; ?>
 
   <div class="container">
     <h2>新增比賽</h2>
-    <form action="" method="POST">
+    <form action="" method="POST" style="display:flex;flex-direction:column;gap:10px;">
       <div class="form-group">
         <label for="gameName">比賽名稱</label>
         <input type="text" class="form-control" id="gameName" name="gameName" required>
@@ -74,8 +75,8 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
           ?>
         </select>
       </div>
-      <div class="form-group">
-        <label for="players">選擇參與隊員</label><br>
+      <div class="form-group" style="display:flex;flex-direction:column;gap:10px;">
+        <label for="players">選擇參與隊員</label>
         <?php
         // Prepare the SQL query to fetch players and their positions for the team
         $sql = "SELECT  p.PlayerName, pos.PositionName, pp.PlayerPositionID

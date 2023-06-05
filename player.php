@@ -47,7 +47,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
     }
     $playersQuery = sqlsrv_query($conn, "SELECT * FROM Player WHERE TeamID = $teamID");
 
-    echo '<table class="table">';
+    echo '<table class="table table-dark table-striped">';
     echo '<tr><th>球員編號</th><th>球員名稱</th><th>職位</th><th>操作</th></tr>';
 
     while ($row = sqlsrv_fetch_array($playersQuery, SQLSRV_FETCH_ASSOC)) {

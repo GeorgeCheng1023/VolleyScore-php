@@ -9,7 +9,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
   <div class="container">
     <h1>球員分析</h1>
 
-    <table class="table table-bordered">
+    <table class="table table-dark table-striped">
       <thead>
         <tr>
           <th>姓名</th>

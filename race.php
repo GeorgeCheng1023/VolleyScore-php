@@ -70,7 +70,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
 
     <!-- Display the team name and game details -->
     <h2>所有比賽 <a href='newRace.php' class='btn btn-primary'>新增比賽</a></h2>
-    <table class="table table-bordered">
+    <table class="table table-dark table-striped">
       <thead>
         <tr>
           <th>比賽編號</th>
@@ -87,7 +87,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
         <?php
         // Display game details
         while ($game = sqlsrv_fetch_array($gameStmt, SQLSRV_FETCH_ASSOC)) {
-          echo '<tr>';
+          echo '<tr >';
           echo '<td>' . $game['GameID'] . '</td>';
           echo '<td>' . $game['GameName'] . '</td>';
           echo '<td>' . $game['Time']->format('Y-m-d H:i:s') . '</td>';
