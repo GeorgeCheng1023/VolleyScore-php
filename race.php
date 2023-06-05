@@ -95,7 +95,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
           echo '<td>' . $game['YourScore'] . '</td>';
           echo '<td>' . $game['OppositeScore'] . '</td>';
           echo '<td class="fw-bold text-' .  (($game['YourScore'] > $game['OppositeScore']) ? 'success' : 'danger') . '">' . (($game['YourScore'] > $game['OppositeScore']) ? 'Win' : 'Lose') .  "</td>";
-          echo '<td><a href="editRace.php?gameID=' . $game['GameID'] . '">編輯</a> <a href="deleteRace.php?gameID=' . $game['GameID'] . '">刪除</a></td>';
+          echo '<td><a href="recordRace.php?gameID=' . $game['GameID'] . '">紀錄</a> <a href="deleteRace.php?gameID=' . $game['GameID'] . '">刪除</a></td>';
           echo '</tr>';
         }
         ?>

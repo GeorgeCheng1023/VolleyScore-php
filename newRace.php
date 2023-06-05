@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     sqlsrv_execute($stmt);
   };
 
-  header("Location: /editRace.php?gameID=" . $gameID);
+  header("Location: /recordRace.php?gameID=" . $gameID);
   exit();
 }
 ?>
