@@ -29,6 +29,9 @@
         <li class="nav-item">
           <a class="nav-link" aria-current="page" href="race.php">比賽系統</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="analyze.php">球員分析</a>
+        </li>
       </ul>';
         echo '<form action="logout.php">';
         echo '<button class="btn btn-primary">';
