@@ -9,9 +9,8 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
     <?php include "components\header.php"; ?>
 
     <?php
-    include($_SERVER['DOCUMENT_ROOT'] . '/utils/db_connect.php');
 
-    $teamId =  $_COOKIE["teamID"];
+    $teamID =  $_COOKIE["teamID"];
     if (!isset($teamID)) {
         header('Location: login.php');
     }

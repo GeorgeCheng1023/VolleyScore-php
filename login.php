@@ -1,5 +1,9 @@
 <?php
 include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
+if (isset($_COOKIE['teamID'])) {
+  header('Location: team.php');
+}
+
 ?>
 </head>
 

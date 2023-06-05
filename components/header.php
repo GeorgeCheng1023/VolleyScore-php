@@ -5,7 +5,12 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+      <?php
+
+      if (isset($_COOKIE['teamID'])) {
+        echo '
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             編輯資料
@@ -24,18 +29,15 @@
         <li class="nav-item">
           <a class="nav-link" aria-current="page" href="race.php">比賽系統</a>
         </li>
-      </ul>
-
-      <?php
-
-      if (isset($_COOKIE['teamID'])) {
+      </ul>';
         echo '<form action="logout.php">';
         echo '<button class="btn btn-primary">';
         echo '登出';
         echo '</button>';
         echo '</form>';
       } else {
-        echo '<a href="login.php" class="btn btn-primary">';
+        echo '<div class="me-auto"></div>
+        <a href="login.php" class="btn btn-primary">';
         echo '登入';
         echo '</a>';
       }

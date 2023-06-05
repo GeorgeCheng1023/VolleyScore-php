@@ -160,43 +160,50 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
                 </div>
             </div>
             <div class="text-center">
-                <a href="login.php" class="btn-get-started scrollto">Get Started</a>
+                <a href=<?php
+                        if (!isset($_COOKIE['teamID'])) {
+                            echo 'login.php';
+                        } else {
+                            echo 'race.php';
+                        }
+                        ?> class="btn btn-primary p-3 mt-3 fs-4">立即開始</a>
             </div>
 
-            <!-- <div class="row icon-boxes">
+            <div class="row icon-boxes">
                 <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="zoom-in" data-aos-delay="200">
                     <div class="icon-box">
                         <div class="icon"><i class="ri-stack-line"></i></div>
-                        <h4 class="title"><a href="">Lorem Ipsum</a></h4>
-                        <p class="description">Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi</p>
+                        <h4 class="title"><a href="team.php">編輯隊伍</a></h4>
+                        <p class="description">更改隊伍名稱、設定隊員的職位與球號</p>
                     </div>
                 </div>
 
                 <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="zoom-in" data-aos-delay="300">
                     <div class="icon-box">
                         <div class="icon"><i class="ri-palette-line"></i></div>
-                        <h4 class="title"><a href="">Sed ut perspiciatis</a></h4>
-                        <p class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</p>
+                        <h4 class="title"><a href="race.php">比賽系統</a></h4>
+                        <p class="description">創建、紀錄每一局比賽的得失分狀況</p>
                     </div>
                 </div>
 
                 <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="zoom-in" data-aos-delay="400">
                     <div class="icon-box">
                         <div class="icon"><i class="ri-command-line"></i></div>
-                        <h4 class="title"><a href="">Magni Dolores</a></h4>
-                        <p class="description">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia</p>
+                        <h4 class="title"><a href="analyze.php">球員分析</a></h4>
+                        <p class="description">分析球員的得分與防守率，找出問題，並設計練習方式!</p>
                     </div>
                 </div>
-
-                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="zoom-in" data-aos-delay="500">
+                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="zoom-in" data-aos-delay="400">
                     <div class="icon-box">
-                        <div class="icon"><i class="ri-fingerprint-line"></i></div>
-                        <h4 class="title"><a href="">Nemo Enim</a></h4>
-                        <p class="description">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis</p>
+                        <div class="icon"><i class="ri-command-line"></i></div>
+                        <h4 class="title"><a href="tutor.php">使用手冊</a></h4>
+                        <p class="description">不知道如何開始嗎? 點擊此處看看教學!</p>
                     </div>
                 </div>
 
-            </div> -->
+
+
+            </div>
         </div>
     </section><!-- End Hero -->
 
