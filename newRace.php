@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     sqlsrv_execute($stmt);
   };
 
-  header("Location: /race.php");
+  header("Location: /editRace.php?gameID=" . $gameID);
   exit();
 }
 ?>
@@ -45,18 +45,18 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
   <?php include "components/header.php"; ?>
 
   <div class="container">
-    <h2>Create Game</h2>
+    <h2>新增比賽</h2>
     <form action="" method="POST">
       <div class="form-group">
-        <label for="gameName">Game Name</label>
+        <label for="gameName">比賽名稱</label>
         <input type="text" class="form-control" id="gameName" name="gameName" required>
       </div>
       <div class="form-group">
-        <label for="dateTime">Date and Time</label>
+        <label for="dateTime">比賽時間</label>
         <input type="datetime-local" class="form-control" id="dateTime" name="dateTime" required>
       </div>
       <div class="form-group">
-        <label for="opponentTeam">Opponent Team</label>
+        <label for="opponentTeam">敵方隊伍</label>
         <select class="form-control" id="opponentTeam" name="opponentTeam" required>
           <?php
           // Retrieve the TeamID from the cookie
@@ -75,7 +75,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
         </select>
       </div>
       <div class="form-group">
-        <label for="players">Select Players</label><br>
+        <label for="players">選擇參與隊員</label><br>
         <?php
         // Prepare the SQL query to fetch players and their positions for the team
         $sql = "SELECT  p.PlayerName, pos.PositionName, pp.PlayerPositionID
@@ -94,7 +94,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
         }
         ?>
       </div>
-      <button type="submit" class="btn btn-primary">Create Game</button>
+      <button type="submit" class="btn btn-primary">新增</button>
     </form>
   </div>
 

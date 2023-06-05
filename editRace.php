@@ -108,16 +108,19 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
     $stmt = sqlsrv_query($conn, $sql, $params);
 
     echo "<h4>Players:</h4>";
+    echo "<div class='container'>";
+    echo "<div class='row'>";
     while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
       $playerName = $row['PlayerName'];
       $positionName = $row['PositionName'];
       $gamePlayerPositionID = $row['GamePlayerPositionID'];
 
-      echo "<div class='form-check'>";
+      echo "<div class='form-check col'>";
       echo "<input class='form-check-input' id='player-$gamePlayerPositionID'  required type='radio' name='gamePlayerPositionID' value='$gamePlayerPositionID'> ";
       echo "<label class='form-check-label' for='player-$gamePlayerPositionID' >$playerName - $positionName</label>";
-      echo "</div><br>";
-    }
+      echo "</div>";
+    };
+    echo "</div></div>";
 
 
     // Retrieve the scores from the Score table

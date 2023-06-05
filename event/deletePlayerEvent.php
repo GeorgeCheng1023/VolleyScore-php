@@ -11,14 +11,13 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
   if (isset($_GET['playerID'])) {
     $playerID = $_GET['playerID'];
 
-
+    // 删除球员的职位信息
+    $deletePlayerPositionStmt = sqlsrv_prepare($conn, "DELETE FROM PlayerPosition WHERE PlayerID = ?", array(&$playerID));
+    sqlsrv_execute($deletePlayerPositionStmt);
     // 删除球员信息
     $deletePlayerStmt = sqlsrv_prepare($conn, "DELETE FROM Player WHERE PlayerID = ?", array(&$playerID));
     sqlsrv_execute($deletePlayerStmt);
 
-    // 删除球员的职位信息
-    $deletePlayerPositionStmt = sqlsrv_prepare($conn, "DELETE FROM PlayerPosition WHERE PlayerID = ?", array(&$playerID));
-    sqlsrv_execute($deletePlayerPositionStmt);
 
     // 关闭数据库连接
     sqlsrv_close($conn);

@@ -6,15 +6,15 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
 <body id="wrapper">
   <?php include "components/header.php"; ?>
   <div class="container">
-    <h1>Team Games</h1>
-    <a href='newRace.php' class='btn btn-primary'>新增比賽</a>
-    <hr>
 
     <?php
     include($_SERVER['DOCUMENT_ROOT'] . '/utils/db_connect.php');
 
     // Retrieve team ID from URI parameter
     $teamID = $_COOKIE['teamID'];
+    if (!isset($teamID)) {
+      header('Location: login.php');
+    }
 
     // Retrieve team name from the database
     $teamSql = "SELECT Name FROM Team WHERE TeamID = ?";
@@ -41,16 +41,16 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
         g.Name AS GameName,
         g.Time,
         CASE
-          WHEN g.TeamAID = 1 THEN tB.Name
-          WHEN g.TeamBID = 1 THEN tA.Name
+          WHEN g.TeamAID = ? THEN tB.Name
+          WHEN g.TeamBID = ? THEN tA.Name
         END AS OppositeTeamName,
         CASE
-          WHEN g.TeamAID = 1 THEN g.TeamAScore
-          WHEN g.TeamBID = 1 THEN g.TeamBScore
+          WHEN g.TeamAID = ? THEN g.TeamAScore
+          WHEN g.TeamBID = ? THEN g.TeamBScore
         END AS YourScore,
         CASE
-          WHEN g.TeamAID = 1 THEN g.TeamBScore
-          WHEN g.TeamBID = 1 THEN g.TeamAScore
+          WHEN g.TeamAID = ? THEN g.TeamBScore
+          WHEN g.TeamBID = ? THEN g.TeamAScore
         END AS OppositeScore
       FROM
         Game g
@@ -59,7 +59,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
       WHERE
       g.TeamAID = ? OR g.TeamBID = ?;
       ";
-    $gameParams = array($teamID, $teamID);
+    $gameParams = array_fill(0, 8, $teamID);
     $gameStmt = sqlsrv_query($conn, $gameSql, $gameParams);
 
     // Check if the query execution is successful
@@ -69,7 +69,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
     ?>
 
     <!-- Display the team name and game details -->
-    <h2><?php echo $team['Name']; ?>比賽</h2>
+    <h2>所有比賽 <a href='newRace.php' class='btn btn-primary'>新增比賽</a></h2>
     <table class="table table-bordered">
       <thead>
         <tr>
@@ -95,7 +95,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
           echo '<td>' . $game['YourScore'] . '</td>';
           echo '<td>' . $game['OppositeScore'] . '</td>';
           echo '<td class="fw-bold text-' .  (($game['YourScore'] > $game['OppositeScore']) ? 'success' : 'danger') . '">' . (($game['YourScore'] > $game['OppositeScore']) ? 'Win' : 'Lose') .  "</td>";
-          echo '<td><a href="editRace.php?gameID=' . $game['GameID'] . '">編輯</a> <a href="deleteRace.php">刪除</a></td>';
+          echo '<td><a href="editRace.php?gameID=' . $game['GameID'] . '">編輯</a> <a href="deleteRace.php?gameID=' . $game['GameID'] . '">刪除</a></td>';
           echo '</tr>';
         }
         ?>

@@ -11,13 +11,13 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
     <form action="event/addPlayerEvent.php" method="post">
       <div class="form-group">
         <label for="playerNumber">球員編號:</label>
-        <input type="text" class="form-control" id="playerNumber" name="playerNumber">
+        <input type="text" class="form-control" id="playerNumber" name="playerNumber" required>
       </div>
       <div class="form-group">
         <label for="playerName">球員名稱:</label>
-        <input type="text" class="form-control" id="playerName" name="playerName">
+        <input type="text" class="form-control" id="playerName" name="playerName" required>
       </div>
-      <div class="form-group">
+      <div class="form-group position">
         <label for="positions">職位:</label>
         <?php
 
@@ -29,7 +29,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
 
           // 生成職位的 checkbox
           echo '<div class="form-check">';
-          echo '<label class="form-check-label"><input class="form-check-input" type="checkbox" name="positions[]" value="' . $positionID . '">' . $positionName . '</label>';
+          echo '<label class="form-check-label"><input  class="form-check-input" type="checkbox"  name="positions[]" value="' . $positionID . '">' . $positionName . '</label>';
           echo '</div>';
         }
         ?>
@@ -42,6 +42,9 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
     <h2>球員列表</h2>
     <?php
     $teamID = $_COOKIE["teamID"];
+    if (!isset($teamID)) {
+      header('Location: login.php');
+    }
     $playersQuery = sqlsrv_query($conn, "SELECT * FROM Player WHERE TeamID = $teamID");
 
     echo '<table class="table">';
@@ -69,9 +72,11 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
 
     echo '</table>';
 
-
     ?>
   </div>
+
+
+
   <?php
   include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/foot.php');
   ?>

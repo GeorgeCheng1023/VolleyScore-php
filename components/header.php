@@ -11,7 +11,7 @@
             編輯資料
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="teams.php">管理隊伍</a></li>
+            <li><a class="dropdown-item" href="team.php">管理隊伍</a></li>
             <li><a class="dropdown-item" href="player.php">
                 管理球員
               </a></li>
@@ -26,8 +26,21 @@
         </li>
       </ul>
 
-      <a href="login.php" class="btn btn-primary">
-        登入
+      <?php
+
+      if (isset($_COOKIE['teamID'])) {
+        echo '<form action="logout.php">';
+        echo '<button class="btn btn-primary">';
+        echo '登出';
+        echo '</button>';
+        echo '</form>';
+      } else {
+        echo '<a href="login.php" class="btn btn-primary">';
+        echo '登入';
+        echo '</a>';
+      }
+      ?>
+
       </a>
 
     </div>

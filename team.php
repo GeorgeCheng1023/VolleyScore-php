@@ -1,6 +1,7 @@
 <?php
 include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
 ?>
+
 </head>
 
 
@@ -10,6 +11,10 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
     <?php
     include($_SERVER['DOCUMENT_ROOT'] . '/utils/db_connect.php');
 
+    $teamId =  $_COOKIE["teamID"];
+    if (!isset($teamID)) {
+        header('Location: login.php');
+    }
     $sql = 'SELECT Name FROM Team WHERE TeamID = ?';
     $params = array($_COOKIE["teamID"]);
     $stmt = sqlsrv_query($conn, $sql, $params);
@@ -23,7 +28,6 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
     // post update team name
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $teamname = $_POST["TeamName"];
-        $teamId =  $_COOKIE["teamID"];
         $sql = "UPDATE Team SET Name= '$teamname' WHERE TeamID='$teamId' ";
         $query = sqlsrv_query($conn, $sql, $updateParams);
         if ($query === false) {
@@ -31,7 +35,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
         }
 
         // Redirect back to the player list page
-        header("Location: team.php?TeamID=" .  $teamID);
+        header("Location: team.php");
         exit();
     }
 
