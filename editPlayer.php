@@ -15,21 +15,52 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
       $playerName = $_POST['playerName'];
       $positions = $_POST['positions'];
 
-      // 更新球员信息
+      // Update player information
       $updatePlayerStmt = sqlsrv_prepare($conn, "UPDATE Player SET PlayerNumber = ?, PlayerName = ? WHERE PlayerID = ?", array(&$playerNumber, &$playerName, &$playerID));
       sqlsrv_execute($updatePlayerStmt);
 
-      // 删除之前的职位信息
-      $deletePlayerPositionStmt = sqlsrv_prepare($conn, "DELETE FROM PlayerPosition WHERE PlayerID = ?", array(&$playerID));
-      sqlsrv_execute($deletePlayerPositionStmt);
-
-      // 插入新的职位信息
-      $insertPlayerPositionStmt = sqlsrv_prepare($conn, "INSERT INTO PlayerPosition (PlayerID, PositionID) VALUES (?, ?)", array(&$playerID, &$position));
-      foreach ($positions as $position) {
-        sqlsrv_execute($insertPlayerPositionStmt);
+      // Get current player positions
+      $currentPositionsQuery = sqlsrv_query($conn, "SELECT PositionID FROM PlayerPosition WHERE PlayerID = $playerID");
+      $currentPositions = array();
+      while ($row = sqlsrv_fetch_array($currentPositionsQuery, SQLSRV_FETCH_ASSOC)) {
+        $currentPositions[] = $row['PositionID'];
       }
-      header("Location: player.php");
 
+      // Check for newly added positions and insert them into PlayerPosition table
+      foreach ($positions as $position) {
+        if (!in_array($position, $currentPositions)) {
+          $insertPlayerPositionStmt = sqlsrv_prepare($conn, "INSERT INTO PlayerPosition (PlayerID, PositionID) VALUES (?, ?)", array(&$playerID, &$position));
+          sqlsrv_execute($insertPlayerPositionStmt);
+        }
+      }
+
+      // Check for removed positions and delete related data in PlayByPlay, GamePlayerPosition, and PlayerPosition tables
+      foreach ($currentPositions as $currentPosition) {
+        if (!in_array($currentPosition, $positions)) {
+          // Delete related data in PlayByPlay table
+          $deletePlayByPlayStmt = sqlsrv_prepare($conn, "DELETE FROM PlayByPlay WHERE GamePlayerPositionID IN (
+              SELECT GPP.GamePlayerPositionID
+              FROM GamePlayerPosition GPP
+              INNER JOIN PlayerPosition PP ON GPP.PlayerPositionID = PP.PlayerPositionID
+              WHERE PP.PlayerID = ? AND PP.PositionID = ?
+          )", array(&$playerID, &$currentPosition));
+          sqlsrv_execute($deletePlayByPlayStmt);
+
+          // Delete related data in GamePlayerPosition table
+          $deleteGamePlayerPositionStmt = sqlsrv_prepare($conn, "DELETE FROM GamePlayerPosition WHERE PlayerPositionID IN (
+              SELECT PlayerPositionID
+              FROM PlayerPosition
+              WHERE PlayerID = ? AND PositionID = ?
+          )", array(&$playerID, &$currentPosition));
+          sqlsrv_execute($deleteGamePlayerPositionStmt);
+
+          // Delete position from PlayerPosition table
+          $deletePlayerPositionStmt = sqlsrv_prepare($conn, "DELETE FROM PlayerPosition WHERE PlayerID = ? AND PositionID = ?", array(&$playerID, &$currentPosition));
+          sqlsrv_execute($deletePlayerPositionStmt);
+        }
+      }
+
+      header("Location: player.php");
       exit();
     }
   }
@@ -40,24 +71,23 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
   if (isset($_GET['playerID'])) {
     $playerID = $_GET['playerID'];
 
-    // 根據 playerID 查詢球員信息
+    // Retrieve player information
     $playerQuery = sqlsrv_query($conn, "SELECT * FROM Player WHERE PlayerID = $playerID");
     $player = sqlsrv_fetch_array($playerQuery, SQLSRV_FETCH_ASSOC);
 
-    // 根據 playerID 查詢球員的職位
+    // Retrieve player's positions
     $playerPositionsQuery = sqlsrv_query($conn, "SELECT PositionID FROM PlayerPosition WHERE PlayerID = $playerID");
     $selectedPositions = array();
     while ($row = sqlsrv_fetch_array($playerPositionsQuery, SQLSRV_FETCH_ASSOC)) {
       $selectedPositions[] = $row['PositionID'];
     }
 
-    // 從 Position 表中獲取所有職位
+    // Retrieve all positions from Position table
     $positionsQuery = sqlsrv_query($conn, "SELECT * FROM Position");
     $positions = array();
     while ($row = sqlsrv_fetch_array($positionsQuery, SQLSRV_FETCH_ASSOC)) {
       $positions[] = $row;
     }
-
   ?>
 
     <div class="container">
@@ -65,15 +95,15 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
       <form action="" method="post">
         <input type="hidden" name="playerID" value="<?php echo $player['PlayerID']; ?>">
         <div class="form-group">
-          <label for="playerNumber">球員編號:</label>
+          <label for="playerNumber">球員號碼:</label>
           <input type="text" class="form-control" id="playerNumber" name="playerNumber" value="<?php echo $player['PlayerNumber']; ?>">
         </div>
         <div class="form-group">
-          <label for="playerName">球員名稱:</label>
+          <label for="playerName">球員姓名:</label>
           <input type="text" class="form-control" id="playerName" name="playerName" value="<?php echo $player['PlayerName']; ?>">
         </div>
         <div class="form-group">
-          <label for="positions">職位:</label>
+          <label for="positions">球員位置:</label>
           <?php
           foreach ($positions as $position) {
             $positionID = $position['PositionID'];
@@ -86,7 +116,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
           }
           ?>
         </div>
-        <button type="submit" class="btn btn-primary">更新</button>
+        <button type="submit" class="btn btn-primary">Update</button>
       </form>
     </div>
     <?php
@@ -97,6 +127,6 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
 
   <?php
   } else {
-    echo '未提供球員ID。';
+    echo 'Player ID not provided.';
   }
   ?>
