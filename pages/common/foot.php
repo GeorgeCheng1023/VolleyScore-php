@@ -3,6 +3,3 @@
     </body>
 
     </html>
-
-    <?php     // 關閉數據庫連接
-    sqlsrv_close($conn); ?>

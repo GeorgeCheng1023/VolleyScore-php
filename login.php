@@ -44,8 +44,6 @@ if (isset($_COOKIE['teamID'])) {
 
     // If team exists, redirect to index.php
     if ($teamCount > 0) {
-      sqlsrv_free_stmt($stmt);
-      sqlsrv_close($conn);
       header("Location: index.php?TeamID=" . $teamID);
       setcookie("teamID", $teamID, time() + 3600);
       exit;
@@ -60,13 +58,12 @@ if (isset($_COOKIE['teamID'])) {
       die(print_r(sqlsrv_errors(), true));
     }
 
-
-    sqlsrv_free_stmt($stmt);
-    sqlsrv_close($conn);
-
     setcookie("teamID", $teamID, time() + 3600);
 
     header("Location: team.php?TeamID=" . $_COOKIE("teamID"));
     exit;
   }
+  ?>
+  <?php
+  include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/foot.php');
   ?>
