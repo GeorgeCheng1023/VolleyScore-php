@@ -109,16 +109,15 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
 
     echo "<h4>Players:</h4>";
     echo "<div class='container'>";
-    echo "<div class='row'>";
+    echo "<div class='btn-group' role='group'>";
     while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
       $playerName = $row['PlayerName'];
       $positionName = $row['PositionName'];
       $gamePlayerPositionID = $row['GamePlayerPositionID'];
 
-      echo "<div class='form-check col'>";
-      echo "<input class='form-check-input' id='player-$gamePlayerPositionID'  required type='radio' name='gamePlayerPositionID' value='$gamePlayerPositionID'> ";
-      echo "<label class='form-check-label' for='player-$gamePlayerPositionID' >$playerName - $positionName</label>";
-      echo "</div>";
+      echo "<input class='btn-check' autocomplete='off' id='player-$gamePlayerPositionID'  required type='radio' name='gamePlayerPositionID' value='$gamePlayerPositionID'> ";
+      echo "<label class='btn btn-secondary' for='player-$gamePlayerPositionID'>";
+      echo "$playerName - $positionName</label>";
     };
     echo "</div></div>";
 
@@ -170,7 +169,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
         echo "<button type='submit' name='scoreID' value='$scoreID' class='record-button btn $buttonColor'>$scoreName</button>";
       }
 
-      echo "</div>";
+      echo "</div><br>";
     }
 
     echo "<br><br>";
@@ -202,7 +201,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
       echo "Error retrieving play-by-play details: " . print_r(sqlsrv_errors(), true);
     } else {
       // Display the play-by-play details in a table
-      echo "<table class='table table-bordered'>
+      echo "<table class='table table-dark table-striped'>
             <thead>
               <tr>
                   <th>球員名稱</th>
