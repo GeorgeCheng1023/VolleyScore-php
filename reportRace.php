@@ -7,7 +7,6 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
   <?php include "components/header.php"; ?>
 
   <?php
-
   // Get the game ID from the URI
   $gameID = $_GET['gameID'];
 
@@ -31,10 +30,10 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
   $sql = "SELECT PlayerName, ScoreName
   FROM PlayByPlay
   JOIN GamePlayerPosition ON PlayByPlay.GamePlayerPositionID = GamePlayerPosition.GamePlayerPositionID
-JOIN PlayerPosition ON PlayerPosition.PlayerPositionID =GamePlayerPosition.PlayerPositionID
+  JOIN PlayerPosition ON PlayerPosition.PlayerPositionID =GamePlayerPosition.PlayerPositionID
   JOIN Player ON PlayerPosition.PlayerID = Player.PlayerID
   JOIN Score ON PlayByPlay.ScoreID = Score.ScoreID
-  WHERE GamePlayerPosition.GameID =?
+  WHERE GamePlayerPosition.GameID = ?
   AND GamePlayerPosition.TeamID = ?";
   $params = array($gameID, $teamID);
   $stmt = sqlsrv_query($conn, $sql, $params);
@@ -65,7 +64,8 @@ JOIN PlayerPosition ON PlayerPosition.PlayerPositionID =GamePlayerPosition.Playe
   // Output the report
   ?>
   <div class="container mt-4">
-    <h1>Game Report <a href="recordRace.php?gameID=<?php echo $gameID ?>" class="btn btn-primary"'>編輯紀錄</a></h1>
+    <h1>Game Report <a href="recordRace.php?gameID=<?php echo $gameID ?>" class="btn btn-primary">編輯紀錄</a></h1>
+    <canvas id="radarChart"></canvas>
     <table class="table <?php echo isset($_COOKIE['darkMode']) && $_COOKIE['darkMode'] === 'true' ? 'table-dark' : ''; ?> table-striped">
       <thead>
         <tr>
@@ -92,7 +92,61 @@ JOIN PlayerPosition ON PlayerPosition.PlayerPositionID =GamePlayerPosition.Playe
         </tr>
       </tbody>
     </table>
+
+
   </div>
+
+  <!-- Include Chart.js library -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    // Radar chart data
+    var radarData = {
+      labels: <?php echo json_encode($scoreNames); ?>,
+      datasets: [{
+          label: 'Total',
+          data: <?php echo json_encode(array_values($totals)); ?>,
+          // backgroundColor: 'rgba(0, 123, 255, 0.5)',
+          // borderColor: 'rgba(0, 123, 255, 1)',
+          borderWidth: 2
+        },
+        <?php foreach ($report as $playerName => $playerData) {
+          echo '{';
+          echo 'label: "' . $playerName . '",';
+          echo 'data: [';
+          foreach ($scoreNames as $scoreName) {
+            echo $playerData[$scoreName] . ',';
+          };
+          echo '], borderWidth: 2';
+          echo '},';
+        } ?>
+      ]
+    };
+
+    // Radar chart options
+    var radarOptions = {
+      responsive: true,
+      aspectRatio: 2 / 1,
+      // maintainAspectRatio: false,
+      // scale: {
+      //   ticks: {
+      //     beginAtZero: true,
+      //     stepSize: 1
+      //   }
+      // }
+    };
+
+    // Get the radar chart canvas element
+    var radarChartCanvas = document.getElementById('radarChart');
+
+    // Create the radar chart
+    var radarChart = new Chart(radarChartCanvas, {
+      type: 'radar',
+      data: radarData,
+      options: radarOptions,
+    });
+  </script>
+
   <?php
   include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/foot.php');
   ?>
