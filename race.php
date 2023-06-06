@@ -40,26 +40,17 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
         g.GameID,
         g.Name AS GameName,
         g.Time,
-        CASE
-          WHEN g.TeamAID = ? THEN tB.Name
-          WHEN g.TeamBID = ? THEN tA.Name
-        END AS OppositeTeamName,
-        CASE
-          WHEN g.TeamAID = ? THEN g.TeamAScore
-          WHEN g.TeamBID = ? THEN g.TeamBScore
-        END AS YourScore,
-        CASE
-          WHEN g.TeamAID = ? THEN g.TeamBScore
-          WHEN g.TeamBID = ? THEN g.TeamAScore
-        END AS OppositeScore
+        tB.Name AS OppositeTeamName,
+        g.TeamAScore AS YourScore,
+        g.TeamBScore AS OppositeScore
       FROM
         Game g
         INNER JOIN Team tA ON g.TeamAID = tA.TeamID
         INNER JOIN Team tB ON g.TeamBID = tB.TeamID
       WHERE
-      g.TeamAID = ? OR g.TeamBID = ?;
+      g.TeamAID = ?;
       ";
-    $gameParams = array_fill(0, 8, $teamID);
+    $gameParams = array($teamID);
     $gameStmt = sqlsrv_query($conn, $gameSql, $gameParams);
 
     // Check if the query execution is successful

@@ -208,8 +208,8 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
                   <th>位置</th>
                   <th>得失分</th>
                   <th>得失分名稱</th>
-                  <th>Team A Score</th>
-                  <th>Team B Score</th>
+                  <th>我方得分</th>
+                  <th>敵方得分</th>
               </tr>
             </thead>
             ';

@@ -107,7 +107,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
           </tr>
         <?php } ?>
         <tr>
-          <td class="table-primary">Total</td>
+          <td class="table-primary">總和</td>
           <?php foreach ($scoreNames as $scoreName) { ?>
             <td class="table-primary"><?php echo $totals[$scoreName]; ?></td>
           <?php } ?>
