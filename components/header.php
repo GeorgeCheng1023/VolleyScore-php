@@ -28,6 +28,9 @@
         <li class="nav-item">
           <a class="nav-link" aria-current="page" href="analyze.php">球員分析</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="analyzeRace.php">比賽分析</a>
+        </li>
       </ul>';
         echo '<div class="form-check form-switch pe-3">
         <i class="bi bi-moon-fill"></i>';

@@ -7,8 +7,6 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
   <?php include "components/header.php"; ?>
 
   <?php
-  // Get the game ID from the URI
-  $gameID = $_GET['gameID'];
 
   // Get the team ID from the cookie
   $teamID = $_COOKIE['teamID'];
@@ -22,17 +20,6 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
   while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
     $scoreNames[] = $row['ScoreName'];
   }
-  // Retrieve the game details including team scores
-  $sql = "SELECT g.TeamAScore, g.TeamBScore, tA.Name AS TeamAName, tB.Name AS TeamBName, g.Time, g.Name
-   FROM Game g
-   INNER JOIN Team tA ON g.TeamAID = tA.TeamID
-   INNER JOIN Team tB ON g.TeamBID = tB.TeamID
-   WHERE g.GameID = ?";
-  $params = array($gameID, $teamID);
-  $stmt = sqlsrv_query($conn, $sql, $params);
-  $game = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
-
-
 
   // Generate the report
   $report = array();
@@ -44,9 +31,8 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
   JOIN PlayerPosition ON PlayerPosition.PlayerPositionID =GamePlayerPosition.PlayerPositionID
   JOIN Player ON PlayerPosition.PlayerID = Player.PlayerID
   JOIN Score ON PlayByPlay.ScoreID = Score.ScoreID
-  WHERE GamePlayerPosition.GameID = ?
-  AND GamePlayerPosition.TeamID = ?";
-  $params = array($gameID, $teamID);
+  WHERE GamePlayerPosition.TeamID = ?";
+  $params = array($teamID);
   $stmt = sqlsrv_query($conn, $sql, $params);
 
   if ($stmt !== false) {
@@ -75,18 +61,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
   // Output the report
   ?>
   <div class="container mt-4">
-    <h1>比賽報表<a href="recordRace.php?gameID=<?php echo $gameID ?>" class="btn btn-primary">編輯紀錄</a></h1>
-    <h2><?php
-        echo $game['Name'] . ': ';
-        ?>
-      <?php
-      echo $game['Time']->format('Y-m-d H:i')
-      ?>
-    </h2>
-    <h5 class="text-body-tertiary">
-      <?php
-      echo $game['TeamAName'] . 'v.s.' . $game['TeamBName']; ?>
-    </h5>
+    <h1>比賽分析</h1>
     <canvas id="radarChart"></canvas>
     <table class="table <?php echo isset($_COOKIE['darkMode']) && $_COOKIE['darkMode'] === 'true' ? 'table-dark' : ''; ?> table-striped">
       <thead>
