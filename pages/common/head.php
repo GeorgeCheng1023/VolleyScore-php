@@ -3,7 +3,7 @@ session_start();
 include($_SERVER['DOCUMENT_ROOT'] . '/utils/db_connect.php');
 ?>
 <!DOCTYPE html>
-<html data-bs-theme="dark">
+<html <?php echo isset($_COOKIE['darkMode']) && $_COOKIE['darkMode'] === 'true' ? 'data-bs-theme="dark"' : ''; ?>>
 
 <head>
   <title>排球計分系統</title>

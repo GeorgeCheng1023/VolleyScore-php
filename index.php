@@ -96,9 +96,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
         transform: scale(1.08);
     }
 
-    #hero .icon-box:hover .title a {
-        color: #2487ce;
-    }
+
 
     @media (min-width: 1024px) {
         #hero {
@@ -145,7 +143,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
 
     .hover-4 {
         border: 8px solid;
-        border-image: repeating-linear-gradient(135deg, #F8CA00 0 10px, #E97F02 0 20px, #BD1550 0 30px) 8;
+        border-image: repeating-linear-gradient(135deg, #3d85c6 0 10px, #8e7cc3 0 20px, #674ea7 0 30px) 8;
         -webkit-mask:
             conic-gradient(from 180deg at top 8px right 8px, #0000 90deg, #000 0) var(--_i, 200%) 0 /200% var(--_i, 8px) border-box no-repeat,
             conic-gradient(at bottom 8px left 8px, #0000 90deg, #000 0) 0 var(--_i, 200%)/var(--_i, 8px) 200% border-box no-repeat,
@@ -155,7 +153,6 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
 
     .hover-4:hover {
         --_i: 100%;
-        color: yellow;
         transition: .3s, -webkit-mask-size .3s .3s;
     }
 </style>

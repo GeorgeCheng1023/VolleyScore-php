@@ -11,7 +11,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
     <h1>球員分析</h1>
     <canvas id="playerAnalysisChart"></canvas>
 
-    <table class="table table-dark table-striped">
+    <table class="table <?php echo isset($_COOKIE['darkMode']) && $_COOKIE['darkMode'] === 'true' ? 'table-dark' : ''; ?> table-striped">
       <thead>
         <tr>
           <th>姓名</th>

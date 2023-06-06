@@ -70,7 +70,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
 
     <!-- Display the team name and game details -->
     <h2>所有比賽 <a href='newRace.php' class='btn btn-primary'>新增比賽</a></h2>
-    <table class="table table-dark table-striped">
+    <table class="table <?php echo isset($_COOKIE['darkMode']) && $_COOKIE['darkMode'] === 'true' ? 'table-dark' : ''; ?> table-striped">
       <thead>
         <tr>
           <th>比賽編號</th>

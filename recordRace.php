@@ -201,7 +201,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
       echo "Error retrieving play-by-play details: " . print_r(sqlsrv_errors(), true);
     } else {
       // Display the play-by-play details in a table
-      echo "<table class='table table-dark table-striped'>
+      echo '<table class="table ' . (isset($_COOKIE['darkMode']) && $_COOKIE['darkMode'] === 'true' ? 'table-dark' : '') .  ' table-striped">
             <thead>
               <tr>
                   <th>球員名稱</th>
@@ -212,7 +212,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
                   <th>Team B Score</th>
               </tr>
             </thead>
-            ";
+            ';
 
       while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
         echo "<tbody>";

@@ -66,7 +66,7 @@ JOIN PlayerPosition ON PlayerPosition.PlayerPositionID =GamePlayerPosition.Playe
   ?>
   <div class="container mt-4">
     <h1>Game Report <a href="recordRace.php?gameID=<?php echo $gameID ?>" class="btn btn-primary"'>編輯紀錄</a></h1>
-    <table class="table">
+    <table class="table <?php echo isset($_COOKIE['darkMode']) && $_COOKIE['darkMode'] === 'true' ? 'table-dark' : ''; ?> table-striped">
       <thead>
         <tr>
           <th>Player Name</th>
