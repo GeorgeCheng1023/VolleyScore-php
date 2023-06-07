@@ -27,7 +27,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/pages/common/head.php');
     // post update team name
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $teamname = $_POST["TeamName"];
-        $sql = "UPDATE Team SET Name= '$teamname' WHERE TeamID='$teamId' ";
+        $sql = "UPDATE Team SET Name= '$teamname' WHERE TeamID='$teamID' ";
         $query = sqlsrv_query($conn, $sql, $updateParams);
         if ($query === false) {
             die(print_r(sqlsrv_errors(), true));

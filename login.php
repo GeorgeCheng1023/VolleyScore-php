@@ -60,7 +60,7 @@ if (isset($_COOKIE['teamID'])) {
 
     setcookie("teamID", $teamID, time() + 3600);
 
-    header("Location: team.php?TeamID=" . $_COOKIE("teamID"));
+    header("Location: team.php");
     exit;
   }
   ?>
